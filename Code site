@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Secure Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dark">
+
+<div class="center box">
+    <h1>SYSTEM LOGIN</h1>
+
+    <input type="text" id="user" placeholder="Username"><br>
+    <input type="password" id="pass" placeholder="Password"><br>
+
+    <button onclick="login()">ENTER</button>
+    <p id="error"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Control Panel</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dark">
+
+<h1>CONTROL PANEL</h1>
+
+<div class="menu">
+    <button onclick="openTerminal()">Terminal</button>
+    <button onclick="showScan()">Scan System</button>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<div id="scanBox" style="display:none;">
+    <p>Scanning system...</p>
+    <div id="scanResult"></div>
+</div>
+
+<div id="terminal" style="display:none;">
+    <p>> Terminal Ready</p>
+    <input id="cmd" placeholder="Enter command" onkeydown="runCommand(event)">
+    <div id="output"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+
+body.dark {
+    background: black;
+    color: #00ff00;
+    font-family: monospace;
+}
+
+.center {
+    text-align: center;
+    margin-top: 20%;
+}
+
+.box {
+    border: 1px solid #00ff00;
+    padding: 20px;
+    width: 80%;
+    margin: auto;
+}
+
+input, button {
+    background: black;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 10px;
+    margin: 5px;
+    width: 80%;
+}
+
+button:hover {
+    background: #00ff00;
+    color: black;
+}
+
+.menu {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#terminal, #scanBox {
+    margin: 20px;
+    border: 1px solid #00ff00;
+    padding: 10px;
+}
+
+
+// LOGIN SYSTEM
+function login() {
+    const user = document.getElementById("user").value;
+    const pass = document.getElementById("pass").value;
+
+    if (user === "admin" && pass === "1234") {
+        window.location.href = "dashboard.html";
+    } else {
+        document.getElementById("error").innerText = "ACCESS DENIED";
+    }
+}
+
+// LOGOUT
+function logout() {
+    window.location.href = "index.html";
+}
+
+// TERMINAL
+function openTerminal() {
+    document.getElementById("terminal").style.display = "block";
+}
+
+function runCommand(e) {
+    if (e.key === "Enter") {
+        let cmd = document.getElementById("cmd").value;
+        let output = document.getElementById("output");
+
+        let result = "";
+
+        switch(cmd) {
+            case "help":
+                result = "Commands: help, date, hack, clear";
+                break;
+
+            case "date":
+                result = new Date();
+                break;
+
+            case "hack":
+                result = "Bypassing firewall... Access Granted!";
+                break;
+
+            case "clear":
+                output.innerHTML = "";
+                document.getElementById("cmd").value = "";
+                return;
+
+            default:
+                result = "Unknown command";
+        }
+
+        output.innerHTML += `<p>> ${cmd}</p><p>${result}</p>`;
+        document.getElementById("cmd").value = "";
+    }
+}
+
+// SCAN SYSTEM
+function showScan() {
+    let box = document.getElementById("scanBox");
+    let result = document.getElementById("scanResult");
+
+    box.style.display = "block";
+    result.innerHTML = "Scanning...";
+
+    setTimeout(() => {
+        result.innerHTML = `
+        ✔ System Secure<br>
+        ✔ No Threats Found<br>
+        ✔ Firewall Active
+        `;
+    }, 2000);
+}
